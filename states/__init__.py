@@ -33,14 +33,22 @@ class StatesList(Resource):
         page = args.get('page',1)
         total_page = math.ceil(len(data)/5)
         data_5 = data[5*(page-1):5*(page)]
+        
+        if page > total_page:
+            return {
+                    "Message":"No more data"
+                    }
+
         if page > 1:
             prev = url_for('states.states_list',page=page-1,_external=True)
         else:
             prev = None
+
         if page < total_page:
             next = url_for('states.states_list',page=page+1,_external=True)
         else: 
             next = None
+
         return {
                 "data":data_5,
                 "prev":prev, 
