@@ -1,17 +1,9 @@
-from flask import (
-        Flask,
-        url_for,
-        request
-)
-import json
-from flask_restplus import (
-        Resource, 
-        Api, 
-        reqparse
-)
+from flask import Flask
+from states import states
 
 app = Flask(__name__)
 
+app.register_blueprint(states)
 
 
 if __name__ == '__main__':

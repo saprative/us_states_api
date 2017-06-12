@@ -1,9 +1,10 @@
 from flask import (
-        Flask,
+        Blueprint,
         url_for,
         request
 )
 import json
+
 from flask_restplus import (
         Resource, 
         Api, 
@@ -11,13 +12,13 @@ from flask_restplus import (
 )
 import math
 
-app = Flask(__name__)
-api = Api(app)
+states = Blueprint('states',__name__)
+api = Api(states)
 
 pagination_arguments = reqparse.RequestParser()
 pagination_arguments.add_argument('page', type=int, default=1)
 
-with open('states.json') as data_file:
+with open('states/states.json') as data_file:
     data = json.load(data_file)
 
 @api.route('/states')
@@ -30,11 +31,11 @@ class StatesList(Resource):
         total_page = math.ceil(len(data)/5)
         data_5 = data[5*(page-1):5*(page)]
         if page > 1:
-            prev = url_for('states_list',page=page-1,_external=True)
+            prev = url_for('states.states_list',page=page-1,_external=True)
         else:
             prev = None
         if page < total_page:
-            next = url_for('states_list',page=page+1,_external=True)
+            next = url_for('states.states_list',page=page+1,_external=True)
         else: 
             next = None
         return {
@@ -48,5 +49,3 @@ class StatesList(Resource):
 
 
 
-if __name__ == '__main__':
- app.run(debug=True)
